@@ -59,6 +59,6 @@ scripts/                             저장소 검증기와 테스트
 
 ## 릴리즈와 후속 계획
 
-`main` 반영 후 Release Please가 Conventional Commits를 읽어 버전 변경 PR을 만듭니다. 관리자가 그 PR을 병합하면 태그와 GitHub Release를 생성합니다. 자동 병합과 npm publish는 구성하지 않았습니다. [릴리즈 운영 방법](docs/RELEASING.md)
+`main` 반영 후 Release Please가 Conventional Commits를 읽어 버전 변경 PR을 만듭니다. 관리자가 그 PR을 병합하면 태그와 GitHub Release를 생성합니다. 자동 병합과 npm publish는 구성하지 않았습니다. [릴리즈 운영 방법](docs/design/releases.md)
 
 동기화 엔진의 범위와 대안은 [개발 계획](docs/PLAN.md)에 정리했습니다. 한 기기·여러 기기, 전역·프로젝트, 공통 원본 관리 방식은 다음 설계 단계에서 결정합니다.

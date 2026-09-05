@@ -1,3 +1,9 @@
+---
+document_kind: plan
+lifecycle: persistent
+push_policy: allow
+---
+
 # Agent Unison 개발 계획 초안
 
 이 문서는 동기화 제품 설계를 논의하는 초안과 승인된 기반 구축 작업을 구분한다. 동기화 엔진의 추천안은 아직 승인된 제품 명세가 아니다.
@@ -8,7 +14,7 @@
 
 기본 구조는 `plugins/agent-unison/`의 두 manifest가 같은 `skills/`를 사용하도록 만든다. 첫 스킬은 동기화 범위를 조사하고 계획하는 기능만 제공한다. 존재하지 않는 동기화 명령을 안내하지 않는다.
 
-개발 검증은 Node.js 24 이상과 표준 라이브러리로 수행한다. 런타임·개발 npm 의존성을 추가하지 않는다. GitHub Actions는 공식 checkout·setup-node와 Release Please Action을 확인한 SHA로 고정한다. 버전은 `version.txt`를 기준으로 두 plugin manifest와 Release Please manifest의 일치를 검사한다. 릴리즈 방식과 설정 조건은 [릴리즈 운영 문서](RELEASING.md)에 기록한다.
+개발 검증은 Node.js 24 이상과 표준 라이브러리로 수행한다. 런타임·개발 npm 의존성을 추가하지 않는다. GitHub Actions는 공식 checkout·setup-node와 Release Please Action을 확인한 SHA로 고정한다. 버전은 `version.txt`를 기준으로 두 plugin manifest와 Release Please manifest의 일치를 검사한다. 릴리즈 방식과 설정 조건은 [릴리즈 운영 문서](design/releases.md)에 기록한다.
 
 ### 실행 순서
 
@@ -18,7 +24,7 @@
 - [x] 문서: 설치법·현재 지원 범위·버전 정책·릴리즈 설정·실패 시 대응을 작성했다. 로컬 링크와 플러그인 검증기로 확인한다.
 - [ ] 원격 검증: 작업 브랜치를 push하고 GitHub Actions 결과를 확인한다. main 반영과 Actions PR 생성 권한 변경은 구체적인 결과를 제시한 뒤 확인한다.
 
-변경 파일은 `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, `plugins/agent-unison/**`, `scripts/validate.mjs`, `scripts/validate.test.mjs`, `.github/workflows/ci.yml`, `.github/workflows/release.yml`, `release-please-config.json`, `.release-please-manifest.json`, `version.txt`, `package.json`, `README.md`, `CHANGELOG.md`, `.gitignore`, 이 문서와 `docs/RELEASING.md`다.
+변경 파일은 `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, `plugins/agent-unison/**`, `scripts/validate.mjs`, `scripts/validate.test.mjs`, `.github/workflows/ci.yml`, `.github/workflows/release.yml`, `release-please-config.json`, `.release-please-manifest.json`, `version.txt`, `package.json`, `README.md`, `CHANGELOG.md`, `.gitignore`, 이 문서와 `docs/design/releases.md`다.
 
 테스트는 임시 저장소 fixture를 만들고 `node scripts/validate.mjs <fixture-root>`를 실제 프로세스로 실행한다. 정상 입력의 종료 코드 0을 먼저 실패 상태에서 확인한 뒤 검사기를 구현한다. 이후 버전 불일치·잘못된 경로 등의 입력을 하나씩 추가해 거부 동작을 검증한다. 전체 검증 진입점은 `npm run check`다.
 
