@@ -78,6 +78,7 @@ try {
   assert.equal(readJson('.release-please-manifest.json')['.'], version, 'Release Please manifest 버전이 다릅니다.');
   const release = readJson('release-please-config.json').packages?.['.'];
   assert.equal(release?.['release-type'], 'simple', '릴리즈 전략은 simple이어야 합니다.');
+  assert.equal(release['initial-version'], '0.1.0', '첫 릴리즈 버전은 0.1.0이어야 합니다.');
   assert.equal(release['package-name'], name, '릴리즈 패키지 이름이 다릅니다.');
   assert.equal(release['include-component-in-tag'], false, '태그에 패키지 접두사를 넣지 않습니다.');
   assert.equal(release['include-v-in-tag'], true, '태그는 v 접두사를 사용합니다.');

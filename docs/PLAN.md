@@ -22,7 +22,9 @@ push_policy: allow
 - [x] 검증: 정상 패키지 통과, 버전 불일치·누락 파일·잘못된 경로·릴리즈 설정 누락 거부를 테스트하고 검사기를 구현한다.
 - [x] CI: 모든 브랜치 push·PR 검증과 main의 Release Please 흐름을 연결했다. 두 workflow의 actionlint 검증을 통과했다. 원격 실행 확인은 다음 항목에서 다룬다.
 - [x] 문서: 설치법·현재 지원 범위·버전 정책·릴리즈 설정·실패 시 대응을 작성했다. 로컬 링크와 플러그인 검증기로 확인한다.
-- [ ] 원격 검증: 작업 브랜치를 push하고 GitHub Actions 결과를 확인한다. main 반영과 Actions PR 생성 권한 변경은 구체적인 결과를 제시한 뒤 확인한다.
+- [x] 원격 기반: 작업 브랜치 push와 CI를 확인하고, 사용자 승인 후 main 반영·기본 브랜치 지정·Actions PR 생성 설정을 적용했다. Release Please가 첫 버전 PR과 해당 브랜치 CI를 생성하는 흐름을 확인했다.
+
+현재 기반 구축 작업은 완료됐으며 동기화 엔진 설계는 아래의 미확정 범위로 남는다. 이후 변경의 실행 결과는 [GitHub Actions](https://github.com/YeongWon2/agent-unison/actions)에서 확인한다. [첫 릴리즈 PR](https://github.com/YeongWon2/agent-unison/pull/1)은 관리자의 검토·병합 대상으로 남기며 이번 작업에서 실제 버전을 발행하지 않는다. 확정된 릴리즈 방식은 [릴리즈 설계](design/releases.md)에 취합했다.
 
 변경 파일은 `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, `plugins/agent-unison/**`, `scripts/validate.mjs`, `scripts/validate.test.mjs`, `.github/workflows/ci.yml`, `.github/workflows/release.yml`, `release-please-config.json`, `.release-please-manifest.json`, `version.txt`, `package.json`, `README.md`, `CHANGELOG.md`, `.gitignore`, 이 문서와 `docs/design/releases.md`다.
 

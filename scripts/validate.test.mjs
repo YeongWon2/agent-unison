@@ -70,6 +70,15 @@ test('릴리즈에서 갱신할 manifest가 빠지면 거부한다', (t) => {
   assert.equal(result.status, 1);
 });
 
+test('초기 릴리즈 버전이 빠지면 거부한다', (t) => {
+  const root = fixture(t);
+  update(root, 'release-please-config.json', (value) => {
+    delete value.packages['.']['initial-version'];
+  });
+  const result = check(root);
+  assert.equal(result.status, 1);
+});
+
 test('정수 앞에 0이 붙은 버전은 거부한다', (t) => {
   const root = fixture(t);
   writeFileSync(join(root, 'version.txt'), '01.0.0\n');
