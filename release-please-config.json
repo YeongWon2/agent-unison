@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "agent-unison",
+      "include-component-in-tag": false,
+      "include-v-in-tag": true,
+      "changelog-sections": [
+        { "type": "feat", "section": "기능" },
+        { "type": "fix", "section": "수정" },
+        { "type": "perf", "section": "성능" },
+        { "type": "revert", "section": "되돌림" }
+      ],
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "plugins/agent-unison/.claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/agent-unison/.codex-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    }
+  }
+}

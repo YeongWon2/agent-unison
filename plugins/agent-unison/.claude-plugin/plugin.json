@@ -1,0 +1,8 @@
+{
+  "name": "agent-unison",
+  "version": "0.0.0",
+  "description": "Claude Code와 Codex의 스킬·문서 동기화 범위를 조사하고 계획합니다. 자동 동기화 엔진은 아직 제공하지 않습니다.",
+  "author": { "name": "YeongWon2" },
+  "repository": "https://github.com/YeongWon2/agent-unison",
+  "skills": "./skills/"
+}

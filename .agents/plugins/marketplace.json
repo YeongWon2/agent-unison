@@ -1,0 +1,20 @@
+{
+  "name": "agent-unison",
+  "interface": {
+    "displayName": "Agent Unison"
+  },
+  "plugins": [
+    {
+      "name": "agent-unison",
+      "source": {
+        "source": "local",
+        "path": "./plugins/agent-unison"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

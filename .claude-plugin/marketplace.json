@@ -1,0 +1,12 @@
+{
+  "name": "agent-unison",
+  "metadata": { "description": "Claude Code와 Codex의 스킬·문서 동기화 계획을 제공하는 Agent Unison marketplace" },
+  "owner": { "name": "YeongWon2" },
+  "plugins": [
+    {
+      "name": "agent-unison",
+      "source": "./plugins/agent-unison",
+      "description": "Claude Code와 Codex의 스킬·문서 동기화 계획"
+    }
+  ]
+}

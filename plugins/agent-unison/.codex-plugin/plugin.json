@@ -1,0 +1,19 @@
+{
+  "name": "agent-unison",
+  "version": "0.0.0",
+  "description": "Claude Code와 Codex의 스킬·문서 동기화 범위를 조사하고 계획합니다. 자동 동기화 엔진은 아직 제공하지 않습니다.",
+  "author": {
+    "name": "YeongWon2"
+  },
+  "repository": "https://github.com/YeongWon2/agent-unison",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Unison",
+    "shortDescription": "Claude·Codex 동기화 계획",
+    "longDescription": "선택한 스킬과 문서를 읽어 공통 내용·도구 전용 내용·충돌을 구분하고 동기화 계획을 작성합니다. 파일 자동 동기화는 후속 개발 범위입니다.",
+    "developerName": "YeongWon2",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "defaultPrompt": ["Claude와 Codex 사이에서 공유할 스킬과 문서의 동기화 계획을 세워줘."]
+  }
+}

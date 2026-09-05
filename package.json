@@ -1,0 +1,11 @@
+{
+  "name": "agent-unison-development",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test scripts/*.test.mjs",
+    "check": "node --check scripts/validate.mjs && npm run validate && npm test"
+  }
+}
