@@ -76,7 +76,9 @@ try {
   }
 
   assert.equal(readJson('.release-please-manifest.json')['.'], version, 'Release Please manifest 버전이 다릅니다.');
-  const release = readJson('release-please-config.json').packages?.['.'];
+  const releaseConfig = readJson('release-please-config.json');
+  assert.equal(releaseConfig['always-update'], true, '기존 릴리즈 PR은 main 변경을 반영해야 합니다.');
+  const release = releaseConfig.packages?.['.'];
   assert.equal(release?.['release-type'], 'simple', '릴리즈 전략은 simple이어야 합니다.');
   assert.equal(release['initial-version'], '0.1.0', '첫 릴리즈 버전은 0.1.0이어야 합니다.');
   assert.equal(release['package-name'], name, '릴리즈 패키지 이름이 다릅니다.');

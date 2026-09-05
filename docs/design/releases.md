@@ -40,6 +40,8 @@ CI에는 `contents: read`만 부여한다. Release 작업에는 태그·Release�
 
 ## 저장소 활성화 조건
 
+최상위 `always-update: true`로 릴리즈 노트가 같아도 기존 PR에 main 변경을 반영한다. 기본값은 false여서 문서만 바뀌면 갱신을 생략할 수 있다. 초기 changelog를 main에서 제거했을 때 기존 PR 갱신이 생략되어 충돌한 사례를 확인했다. 이 설정은 API 호출을 늘리는 대신 기존 PR의 기준 브랜치 반영을 유지한다. [공식 manifest 설정](https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md)
+
 - 기본 브랜치는 `main`으로 운영한다. 최초 기반 구축 브랜치를 검토한 뒤 main에 반영한다.
 - Settings → Actions → General → Workflow permissions에서 **Allow GitHub Actions to create and approve pull requests**를 활성화한다. 워크플로가 자체 PR을 승인하거나 자동 병합하는 단계는 없다.
 - 기본 워크플로 권한은 read로 유지한다. 필요한 쓰기 권한은 Release job에만 선언한다.
