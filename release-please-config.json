@@ -17,6 +17,11 @@
       "extra-files": [
         {
           "type": "json",
+          "path": "plugins/agent-unison/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
           "path": "plugins/agent-unison/.claude-plugin/plugin.json",
           "jsonpath": "$.version"
         },
