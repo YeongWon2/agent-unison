@@ -92,3 +92,38 @@ test('JSON이 손상되면 검증이 실패한다', (t) => {
   const result = check(root);
   assert.equal(result.status, 1);
 });
+
+test('루트 plugin.json이 없으면 거부한다', (t) => {
+  const root = fixture(t);
+  rmSync(join(root, plugin, 'plugin.json'), { force: true });
+  const result = check(root);
+  assert.equal(result.status, 1);
+});
+
+test('루트 plugin.json 버전이 다르면 거부한다', (t) => {
+  const root = fixture(t);
+  update(root, `${plugin}/plugin.json`, (value) => { value.version = '9.9.9'; });
+  const result = check(root);
+  assert.equal(result.status, 1);
+});
+
+test('루트 plugin.json에 Agent Plugins schema가 없으면 거부한다', (t) => {
+  const root = fixture(t);
+  update(root, `${plugin}/plugin.json`, (value) => { delete value.$schema; });
+  const result = check(root);
+  assert.equal(result.status, 1);
+});
+
+test('루트 plugin.json에 schema가 허용하지 않는 필드가 있으면 거부한다', (t) => {
+  const root = fixture(t);
+  update(root, `${plugin}/plugin.json`, (value) => { value.skills = './skills/'; });
+  const result = check(root);
+  assert.equal(result.status, 1);
+});
+
+test('루트 interface와 Codex overlay interface가 다르면 거부한다', (t) => {
+  const root = fixture(t);
+  update(root, `${plugin}/.codex-plugin/plugin.json`, (value) => { value.interface.displayName = '다른 이름'; });
+  const result = check(root);
+  assert.equal(result.status, 1);
+});

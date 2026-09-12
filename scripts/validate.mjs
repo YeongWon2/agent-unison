@@ -16,10 +16,17 @@ if (process.argv.length > 3 || process.argv[2]?.startsWith('-')) {
 const root = resolve(process.argv[2] ?? fileURLToPath(new URL('../', import.meta.url)));
 const name = 'agent-unison';
 const plugin = `plugins/${name}`;
-const manifests = [
+const portableManifest = `${plugin}/plugin.json`;
+const overlayManifests = [
   `${plugin}/.claude-plugin/plugin.json`,
   `${plugin}/.codex-plugin/plugin.json`,
 ];
+const manifests = [portableManifest, ...overlayManifests];
+// https://agent-plugins.org/schemas/1.0.0/plugin.schema.json: required $schema·name, additionalProperties false
+const portableSchema = 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json';
+const portableFields = new Set([
+  '$schema', 'name', 'version', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'extensions',
+]);
 
 function readJson(path) {
   const value = JSON.parse(readFileSync(join(root, path), 'utf8'));
@@ -38,18 +45,27 @@ try {
     const manifest = readJson(path);
     assert.equal(manifest.name, name, `${path}: 이름이 폴더와 다릅니다.`);
     assert.equal(manifest.version, version, `${path}: version.txt와 버전이 다릅니다.`);
-    assert.equal(manifest.skills, './skills/', `${path}: 스킬 경로가 다릅니다.`);
     nonempty(manifest.description, `${path}.description`);
     nonempty(manifest.author?.name, `${path}.author.name`);
   }
+  for (const path of overlayManifests) {
+    assert.equal(readJson(path).skills, './skills/', `${path}: 스킬 경로가 다릅니다.`);
+  }
 
-  const codex = readJson(manifests[1]);
+  const codex = readJson(overlayManifests[1]);
   for (const field of ['displayName', 'shortDescription', 'longDescription', 'developerName', 'category']) {
     nonempty(codex.interface?.[field], `Codex interface.${field}`);
   }
   assert(Array.isArray(codex.interface.capabilities), 'Codex capabilities 배열이 필요합니다.');
   assert(Array.isArray(codex.interface.defaultPrompt) && codex.interface.defaultPrompt.length > 0, 'Codex 기본 프롬프트가 필요합니다.');
   for (const prompt of codex.interface.defaultPrompt) nonempty(prompt, 'Codex 기본 프롬프트');
+
+  const portable = readJson(portableManifest);
+  assert.equal(portable.$schema, portableSchema, `${portableManifest}: Agent Plugins schema 선언이 필요합니다.`);
+  for (const field of Object.keys(portable)) {
+    assert(portableFields.has(field), `${portableManifest}: schema가 허용하지 않는 필드입니다: ${field}`);
+  }
+  assert.deepEqual(portable.extensions?.['com.openai']?.interface, codex.interface, `${portableManifest}: extensions.com.openai.interface가 Codex overlay와 다릅니다.`);
 
   const claudeMarket = readJson('.claude-plugin/marketplace.json');
   const codexMarket = readJson('.agents/plugins/marketplace.json');
@@ -86,7 +102,7 @@ try {
   assert.equal(release['include-v-in-tag'], true, '태그는 v 접두사를 사용합니다.');
   assert.deepEqual(release['extra-files'], manifests.map((path) => ({
     type: 'json', path, jsonpath: '$.version',
-  })), '릴리즈는 두 plugin manifest의 version을 함께 갱신해야 합니다.');
+  })), '릴리즈는 세 plugin manifest의 version을 함께 갱신해야 합니다.');
 
   console.log(`패키지·버전·릴리즈 설정 검증 통과: ${name} ${version}`);
 } catch (error) {

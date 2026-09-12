@@ -34,6 +34,8 @@ codex plugin add agent-unison@agent-unison
 
 Codex를 새로 열고 Agent Unison으로 동기화 계획을 세워 달라고 요청합니다. 위 CLI 구문은 `codex-cli 0.153.4`의 도움말을 기준으로 확인했습니다. 앱에서 설치하는 경우 marketplace 등록 후 플러그인 목록에서 Agent Unison을 선택합니다.
 
+Codex는 플러그인 루트의 `plugin.json`([Agent Plugins](https://agent-plugins.org) schema 1.0.0)을 읽고, `.codex-plugin/plugin.json`은 그 파일이 없을 때의 호환 fallback으로 사용합니다. 격리한 `CODEX_HOME`에서 루트 manifest만으로 `codex-cli 0.153.4` 설치가 완료되는 것을 확인했습니다. [Codex 플러그인 패키징 문서](https://developers.openai.com/codex/plugins/build)
+
 ## 개발 검증
 
 Node.js 24 이상을 사용합니다. npm 의존성이 없으므로 패키지 설치 없이 실행할 수 있습니다.
@@ -42,7 +44,13 @@ Node.js 24 이상을 사용합니다. npm 의존성이 없으므로 패키지 �
 npm run check
 ```
 
-검증기는 두 도구의 manifest, marketplace 연결, 스킬 기본 메타데이터, 버전 일치, Release Please 갱신 대상을 확인합니다. 테스트는 임시 디렉터리에서 정상·오류 입력을 실제 CLI로 검증합니다. 이 검사는 각 도구의 전체 schema 검증이나 모델의 지시 준수 검증을 대신하지 않습니다.
+검증기는 세 plugin manifest(루트 `plugin.json`, Claude·Codex overlay), marketplace 연결, 스킬 기본 메타데이터, 버전 일치, 루트 manifest와 Codex overlay의 `interface` 일치, Release Please 갱신 대상을 확인합니다. 테스트는 임시 디렉터리에서 정상·오류 입력을 실제 CLI로 검증합니다. 이 검사는 각 도구의 전체 schema 검증이나 모델의 지시 준수 검증을 대신하지 않습니다.
+
+Claude Code의 strict 검증은 별도 명령으로 실행합니다. `npx`가 고정된 버전의 Claude Code를 내려받으므로 네트워크가 필요하며, CI에서도 같은 명령을 실행합니다.
+
+```sh
+npm run validate:claude
+```
 
 ## 구조
 
@@ -50,8 +58,9 @@ npm run check
 .claude-plugin/marketplace.json       Claude marketplace
 .agents/plugins/marketplace.json      Codex marketplace
 plugins/agent-unison/
+  plugin.json                         Agent Plugins 표준 manifest (Codex가 우선 읽음)
   .claude-plugin/plugin.json          Claude plugin manifest
-  .codex-plugin/plugin.json           Codex plugin manifest
+  .codex-plugin/plugin.json           Codex 호환 fallback manifest
   skills/plan-sync/SKILL.md           두 도구가 공유하는 계획 스킬
 scripts/                             저장소 검증기와 테스트
 .github/workflows/                    CI·릴리즈 자동화

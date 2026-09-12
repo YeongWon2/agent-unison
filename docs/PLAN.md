@@ -14,7 +14,9 @@ push_policy: allow
 
 기본 구조는 `plugins/agent-unison/`의 두 manifest가 같은 `skills/`를 사용하도록 만든다. 첫 스킬은 동기화 범위를 조사하고 계획하는 기능만 제공한다. 존재하지 않는 동기화 명령을 안내하지 않는다.
 
-개발 검증은 Node.js 24 이상과 표준 라이브러리로 수행한다. 런타임·개발 npm 의존성을 추가하지 않는다. GitHub Actions는 공식 checkout·setup-node와 Release Please Action을 확인한 SHA로 고정한다. 버전은 `version.txt`를 기준으로 두 plugin manifest와 Release Please manifest의 일치를 검사한다. 릴리즈 방식과 설정 조건은 [릴리즈 운영 문서](design/releases.md)에 기록한다.
+2026-09-12 갱신: Codex 공식 문서가 플러그인 루트의 `plugin.json`(Agent Plugins schema 1.0.0, `extensions.com.openai.interface`)을 표준 진입점으로 안내하고 `.codex-plugin/plugin.json`을 호환 fallback으로 정의한다. 루트 manifest를 추가하고 overlay는 구버전 호환을 위해 유지한다. 검증기는 세 manifest의 버전과 루트·overlay `interface`의 일치를 검사한다.
+
+개발 검증은 Node.js 24 이상과 표준 라이브러리로 수행한다. 런타임·개발 npm 의존성을 추가하지 않는다. Claude Code strict 검증은 `npx`로 고정 버전을 내려받는 별도 명령(`npm run validate:claude`)으로 두고 CI에서 실행한다. GitHub Actions는 공식 checkout·setup-node와 Release Please Action을 확인한 SHA로 고정한다. 버전은 `version.txt`를 기준으로 세 plugin manifest와 Release Please manifest의 일치를 검사한다. 릴리즈 방식과 설정 조건은 [릴리즈 운영 문서](design/releases.md)에 기록한다.
 
 ### 실행 순서
 
@@ -50,8 +52,9 @@ Claude Code와 Codex를 함께 사용할 때 스킬·작업 규칙·참고 문�
 | 스킬 위치 | Claude Code는 `.claude/skills/`, Codex는 `.agents/skills/` 등의 위치에서 로컬 스킬을 탐색한다. | 두 도구의 출력 위치를 명시적으로 구분한다. 파일 복사 이후 실제 발견 여부도 검증해야 한다. |
 | 지침 파일 | Claude Code는 `CLAUDE.md`와 `@path` import를 지원한다. Codex는 `AGENTS.md`, `AGENTS.override.md`, 설정된 대체 파일명 등의 탐색 규칙을 사용한다. | 파일명을 바꾸거나 import 문장을 그대로 복사하는 것으로 호환성을 판단하지 않는다. |
 | 적용 범위 | 지침과 스킬의 탐색은 디렉터리 위치와 도구별 규칙에 영향을 받는다. | 전역 지침을 프로젝트로 옮기거나 하위 경로 규칙을 전역 본문으로 펼치지 않는다. |
+| 플러그인 manifest | Claude Code는 `.claude-plugin/plugin.json`을 읽고 인식하지 않는 최상위 필드를 무시한다. Codex는 루트 `plugin.json`(Agent Plugins schema, `additionalProperties: false`)을 우선 읽고 `.codex-plugin/plugin.json`을 fallback으로 쓴다. Codex는 `.claude-plugin/marketplace.json`도 legacy 호환 marketplace로 읽는다. | 한 패키지에 세 manifest를 두고 버전·`interface`를 검증기로 맞춘다. 루트 manifest에는 schema가 허용하는 필드만 둔다. |
 
-근거: [Claude Code skills](https://code.claude.com/docs/en/skills), [Claude Code memory](https://code.claude.com/docs/en/memory), [Codex skills](https://developers.openai.com/codex/skills), [Codex AGENTS.md](https://developers.openai.com/codex/guides/agents-md). 플러그인 패키지 내부 경로와 일반 로컬 스킬 경로는 별도로 검증한다. 지원 버전은 설치·실행 실험을 거쳐 정한다.
+근거: [Claude Code skills](https://code.claude.com/docs/en/skills), [Claude Code memory](https://code.claude.com/docs/en/memory), [Claude Code plugins reference](https://code.claude.com/docs/en/plugins-reference), [Codex skills](https://developers.openai.com/codex/skills), [Codex AGENTS.md](https://developers.openai.com/codex/guides/agents-md), [Codex 플러그인 패키징](https://developers.openai.com/codex/plugins/build). 플러그인 패키지 내부 경로와 일반 로컬 스킬 경로는 별도로 검증한다. 지원 버전은 설치·실행 실험을 거쳐 정한다.
 
 ## agent-handoff에서 가져올 것과 재설계할 것
 
