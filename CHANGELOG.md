@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/YeongWon2/agent-unison/compare/v0.1.0...v0.2.0) (2026-09-12)
+
+
+### 기능
+
+* Agent Plugins 루트 manifest 추가 ([4fdc88f](https://github.com/YeongWon2/agent-unison/commit/4fdc88f7ba698842cc56edee9754ad206f034d2c))
+
 ## 0.1.0 (2026-09-05)
 
 
